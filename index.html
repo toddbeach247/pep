@@ -278,6 +278,14 @@
         </select>
       </div>
       <div class="form-group">
+        <label>Photo (business card, headshot, where you met)</label>
+        <div class="photo-upload" onclick="document.getElementById('pe-photos').click()">
+          Tap to add a photo
+          <input type="file" id="pe-photos" accept="image/*" multiple onchange="previewPhotos('pe')" />
+        </div>
+        <div class="photo-previews" id="pe-previews"></div>
+      </div>
+      <div class="form-group">
         <label>Notes</label>
         <textarea id="pe-notes" placeholder="How you met, what they're looking for, anything relevant..."></textarea>
       </div>
@@ -429,6 +437,9 @@
     const filled = getFilledCount([name, phone, email, notes]);
     if (filled < 2) { setStatus('pe-status-msg', 'Fill in at least 2 fields to submit.', 'error'); return; }
 
+    setStatus('pe-status-msg', 'Uploading photo...', '');
+    const photos = await encodePhotos('pe-photos');
+
     setStatus('pe-status-msg', 'Logging...', '');
     try {
       await fetch(SCRIPT_URL, {
@@ -438,11 +449,11 @@
         body: JSON.stringify({
           type: 'person',
           timestamp: new Date().toISOString(),
-          name, phone, email, personType: type, notes
+          name, phone, email, personType: type, notes, photos
         })
       });
       setStatus('pe-status-msg', '✓ Person logged.', 'success');
-      clearForm(['pe-name','pe-phone','pe-email','pe-notes'], ['pe-type'], null, null, null);
+      clearForm(['pe-name','pe-phone','pe-email','pe-notes'], ['pe-type'], null, 'pe-photos', 'pe-previews');
     } catch(e) {
       setStatus('pe-status-msg', 'Something went wrong. Try again.', 'error');
     }
