@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PEP</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -103,6 +104,27 @@
     .status-msg { text-align: center; font-size: 0.8rem; color: #555; margin-top: 14px; min-height: 20px; }
     .status-msg.success { color: #7ac47a; }
     .status-msg.error { color: #c47a7a; }
+    .auth-bar {
+      background: #1a1a1a;
+      border-radius: 10px;
+      padding: 14px;
+      margin: 0 24px 16px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #555;
+    }
+    .auth-bar.connected { color: #7ac47a; }
+    .sign-in-btn {
+      background: #2a2a2a;
+      border: 1px solid #444;
+      border-radius: 8px;
+      color: #f0f0f0;
+      font-size: 0.85rem;
+      font-family: 'Georgia', serif;
+      padding: 10px 20px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
   </style>
 </head>
 <body>
@@ -113,6 +135,10 @@
       <h1>PEP</h1>
       <p>Properties · Energy · People</p>
     </header>
+    <div class="auth-bar" id="auth-bar">
+      <div id="auth-status">Not signed in to Google Drive</div>
+      <button class="sign-in-btn" onclick="signIn()">Sign in for photo upload</button>
+    </div>
     <div class="home">
       <div class="card properties" onclick="show('properties')">
         <h2>Properties</h2>
@@ -194,7 +220,7 @@
         <label>Photos (up to 5)</label>
         <div class="photo-upload" onclick="document.getElementById('p-photos').click()">
           Tap to add photos
-          <input type="file" id="p-photos" accept="image/*" multiple onchange="previewPhotos('p')" />
+          <input type="file" id="p-photos" accept="image/*" multiple capture="environment" onchange="previewPhotos('p')" />
         </div>
         <div class="photo-previews" id="p-previews"></div>
       </div>
@@ -234,7 +260,7 @@
         <label>Photos (up to 5)</label>
         <div class="photo-upload" onclick="document.getElementById('e-photos').click()">
           Tap to add photos
-          <input type="file" id="e-photos" accept="image/*" multiple onchange="previewPhotos('e')" />
+          <input type="file" id="e-photos" accept="image/*" multiple capture="environment" onchange="previewPhotos('e')" />
         </div>
         <div class="photo-previews" id="e-previews"></div>
       </div>
@@ -281,7 +307,7 @@
         <label>Photo (business card, headshot, where you met)</label>
         <div class="photo-upload" onclick="document.getElementById('pe-photos').click()">
           Tap to add a photo
-          <input type="file" id="pe-photos" accept="image/*" multiple onchange="previewPhotos('pe')" />
+          <input type="file" id="pe-photos" accept="image/*" multiple capture="environment" onchange="previewPhotos('pe')" />
         </div>
         <div class="photo-previews" id="pe-previews"></div>
       </div>
@@ -296,8 +322,62 @@
 
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwf95XKWBwLiplbvIne7kAbO7mBbV_qWj2jEkRbDQA92RTJ92aL7A_bQH94GXWqlgEdtA/exec";
+  const CLIENT_ID = "663410387269-sm5dite9i6ln8pcr14fd93gtl90ehie8.apps.googleusercontent.com";
+  const SCOPES = "https://www.googleapis.com/auth/drive.file";
 
+  let accessToken = null;
   let eaglesVal = { p: 0, e: 0 };
+
+  function signIn() {
+    const client = google.accounts.oauth2.initTokenClient({
+      client_id: CLIENT_ID,
+      scope: SCOPES,
+      callback: (response) => {
+        if (response.access_token) {
+          accessToken = response.access_token;
+          document.getElementById('auth-status').textContent = '✓ Connected to Google Drive';
+          document.getElementById('auth-bar').classList.add('connected');
+          document.querySelector('.sign-in-btn').style.display = 'none';
+        }
+      }
+    });
+    client.requestAccessToken();
+  }
+
+  async function uploadPhotosToDrive(files, folderName) {
+    if (!accessToken || files.length === 0) return '';
+
+    // Create folder
+    const folderRes = await fetch('https://www.googleapis.com/drive/v3/files', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: folderName,
+        mimeType: 'application/vnd.google-apps.folder'
+      })
+    });
+    const folder = await folderRes.json();
+    const folderId = folder.id;
+
+    // Upload each file
+    for (let i = 0; i < Math.min(files.length, 5); i++) {
+      const file = files[i];
+      const metadata = { name: `photo_${i+1}_${file.name}`, parents: [folderId] };
+      const form = new FormData();
+      form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+      form.append('file', file);
+      await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${accessToken}` },
+        body: form
+      });
+    }
+
+    return `https://drive.google.com/drive/folders/${folderId}`;
+  }
 
   function show(id) {
     document.getElementById('home').style.display = id === 'home' ? 'block' : 'none';
@@ -327,21 +407,6 @@
     return fields.filter(f => f && f.trim() !== '').length;
   }
 
-  async function encodePhotos(inputId) {
-    const input = document.getElementById(inputId);
-    const files = Array.from(input.files).slice(0, 5);
-    const encoded = [];
-    for (const file of files) {
-      const base64 = await new Promise((res) => {
-        const reader = new FileReader();
-        reader.onload = e => res(e.target.result.split(',')[1]);
-        reader.readAsDataURL(file);
-      });
-      encoded.push({ data: base64, mimeType: file.type });
-    }
-    return encoded;
-  }
-
   function setStatus(id, msg, type) {
     const el = document.getElementById(id);
     el.textContent = msg;
@@ -368,12 +433,13 @@
     const notes = document.getElementById('p-notes').value;
     const eagles = eaglesVal['p'];
 
-    const filled = getFilledCount([address, status, type, notes]);
-    if (filled < 2) { setStatus('p-status-msg', 'Fill in at least 2 fields to submit.', 'error'); return; }
+    if (getFilledCount([address, status, type, notes]) < 2) { setStatus('p-status-msg', 'Fill in at least 2 fields.', 'error'); return; }
     if (!eagles) { setStatus('p-status-msg', 'Eagles rating is required.', 'error'); return; }
 
     setStatus('p-status-msg', 'Uploading photos...', '');
-    const photos = await encodePhotos('p-photos');
+    const files = Array.from(document.getElementById('p-photos').files);
+    const folderName = `PEP — ${address || 'Property'} — ${new Date().toLocaleDateString()}`;
+    const photoFolder = await uploadPhotosToDrive(files, folderName);
 
     setStatus('p-status-msg', 'Logging...', '');
     try {
@@ -386,7 +452,7 @@
           timestamp: new Date().toISOString(),
           address, status, propertyType: type,
           distress, myListing: mylisting,
-          eagles, notes, photos
+          eagles, notes, photoFolder
         })
       });
       setStatus('p-status-msg', '🦅 Property logged.', 'success');
@@ -401,12 +467,13 @@
     const notes = document.getElementById('e-notes').value;
     const eagles = eaglesVal['e'];
 
-    const filled = getFilledCount([location, notes]);
-    if (filled < 2) { setStatus('e-status-msg', 'Fill in at least 2 fields to submit.', 'error'); return; }
+    if (getFilledCount([location, notes]) < 2) { setStatus('e-status-msg', 'Fill in at least 2 fields.', 'error'); return; }
     if (!eagles) { setStatus('e-status-msg', 'Eagles rating is required.', 'error'); return; }
 
     setStatus('e-status-msg', 'Uploading photos...', '');
-    const photos = await encodePhotos('e-photos');
+    const files = Array.from(document.getElementById('e-photos').files);
+    const folderName = `PEP — ${location || 'Energy'} — ${new Date().toLocaleDateString()}`;
+    const photoFolder = await uploadPhotosToDrive(files, folderName);
 
     setStatus('e-status-msg', 'Logging...', '');
     try {
@@ -417,7 +484,7 @@
         body: JSON.stringify({
           type: 'energy',
           timestamp: new Date().toISOString(),
-          location, eagles, notes, photos
+          location, eagles, notes, photoFolder
         })
       });
       setStatus('e-status-msg', '🦅 Energy logged.', 'success');
@@ -434,11 +501,12 @@
     const type = document.getElementById('pe-type').value;
     const notes = document.getElementById('pe-notes').value;
 
-    const filled = getFilledCount([name, phone, email, notes]);
-    if (filled < 2) { setStatus('pe-status-msg', 'Fill in at least 2 fields to submit.', 'error'); return; }
+    if (getFilledCount([name, phone, email, notes]) < 2) { setStatus('pe-status-msg', 'Fill in at least 2 fields.', 'error'); return; }
 
     setStatus('pe-status-msg', 'Uploading photo...', '');
-    const photos = await encodePhotos('pe-photos');
+    const files = Array.from(document.getElementById('pe-photos').files);
+    const folderName = `PEP — ${name || 'Person'} — ${new Date().toLocaleDateString()}`;
+    const photoFolder = await uploadPhotosToDrive(files, folderName);
 
     setStatus('pe-status-msg', 'Logging...', '');
     try {
@@ -449,7 +517,7 @@
         body: JSON.stringify({
           type: 'person',
           timestamp: new Date().toISOString(),
-          name, phone, email, personType: type, notes, photos
+          name, phone, email, personType: type, notes, photoFolder
         })
       });
       setStatus('pe-status-msg', '✓ Person logged.', 'success');
