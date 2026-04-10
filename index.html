@@ -6,7 +6,6 @@
   <title>PEP</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       background: #0f0f0f;
       color: #f0f0f0;
@@ -14,29 +13,10 @@
       min-height: 100vh;
       padding: 0 0 40px 0;
     }
-
-    header {
-      text-align: center;
-      padding: 36px 20px 20px;
-    }
-
-    header h1 {
-      font-size: 2rem;
-      font-weight: bold;
-      letter-spacing: 0.05em;
-      color: #f0f0f0;
-    }
-
-    header p {
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      color: #555;
-      margin-top: 6px;
-      text-transform: uppercase;
-    }
-
+    header { text-align: center; padding: 36px 20px 20px; }
+    header h1 { font-size: 2rem; font-weight: bold; letter-spacing: 0.05em; color: #f0f0f0; }
+    header p { font-size: 0.65rem; letter-spacing: 0.2em; color: #555; margin-top: 6px; text-transform: uppercase; }
     .home { padding: 20px 24px; }
-
     .card {
       background: #1a1a1a;
       border-radius: 12px;
@@ -45,67 +25,20 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-
     .card:active { background: #222; }
-
-    .card h2 {
-      font-size: 1.6rem;
-      font-weight: normal;
-    }
-
-    .card p {
-      font-size: 0.6rem;
-      letter-spacing: 0.18em;
-      color: #555;
-      margin-top: 6px;
-      text-transform: uppercase;
-    }
-
+    .card h2 { font-size: 1.6rem; font-weight: normal; }
+    .card p { font-size: 0.6rem; letter-spacing: 0.18em; color: #555; margin-top: 6px; text-transform: uppercase; }
     .card.properties h2 { color: #c8702a; }
     .card.energy h2 { color: #4a7fa5; }
     .card.people h2 { color: #888; }
-
-    /* SCREEN */
     .screen { display: none; padding: 0 24px; }
     .screen.active { display: block; }
-
-    .screen-header {
-      display: flex;
-      align-items: center;
-      padding: 28px 24px 16px;
-      gap: 12px;
-    }
-
-    .back-btn {
-      background: none;
-      border: none;
-      color: #888;
-      font-size: 1.2rem;
-      cursor: pointer;
-      padding: 4px 8px 4px 0;
-    }
-
-    .screen-header h2 {
-      font-size: 1.4rem;
-      font-weight: bold;
-      color: #f0f0f0;
-    }
-
-    /* FORM */
+    .screen-header { display: flex; align-items: center; padding: 28px 24px 16px; gap: 12px; }
+    .back-btn { background: none; border: none; color: #888; font-size: 1.2rem; cursor: pointer; padding: 4px 8px 4px 0; }
+    .screen-header h2 { font-size: 1.4rem; font-weight: bold; color: #f0f0f0; }
     .form-group { margin-bottom: 20px; }
-
-    label {
-      display: block;
-      font-size: 0.6rem;
-      letter-spacing: 0.18em;
-      color: #555;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    input[type="text"],
-    textarea,
-    select {
+    label { display: block; font-size: 0.6rem; letter-spacing: 0.18em; color: #555; text-transform: uppercase; margin-bottom: 8px; }
+    input[type="text"], textarea, select {
       width: 100%;
       background: #1a1a1a;
       border: 1px solid #2a2a2a;
@@ -117,22 +50,9 @@
       outline: none;
       -webkit-appearance: none;
     }
-
-    input[type="text"]:focus,
-    textarea:focus,
-    select:focus {
-      border-color: #444;
-    }
-
+    input[type="text"]:focus, textarea:focus, select:focus { border-color: #444; }
     textarea { min-height: 90px; resize: vertical; }
-
-    /* EAGLES */
-    .eagles-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
+    .eagles-row { display: flex; gap: 8px; flex-wrap: wrap; }
     .eagle-btn {
       flex: 1;
       min-width: 36px;
@@ -147,14 +67,7 @@
       transition: all 0.15s;
       font-family: 'Georgia', serif;
     }
-
-    .eagle-btn.selected {
-      background: #1e3a1e;
-      border-color: #4a7a4a;
-      color: #7ac47a;
-    }
-
-    /* PHOTO */
+    .eagle-btn.selected { background: #1e3a1e; border-color: #4a7a4a; color: #7ac47a; }
     .photo-upload {
       background: #1a1a1a;
       border: 1px dashed #2a2a2a;
@@ -166,24 +79,9 @@
       font-size: 0.85rem;
       letter-spacing: 0.05em;
     }
-
     .photo-upload input { display: none; }
-
-    .photo-previews {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-
-    .photo-previews img {
-      width: 70px;
-      height: 70px;
-      object-fit: cover;
-      border-radius: 6px;
-    }
-
-    /* SUBMIT */
+    .photo-previews { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .photo-previews img { width: 70px; height: 70px; object-fit: cover; border-radius: 6px; }
     .submit-btn {
       width: 100%;
       background: #c8702a;
@@ -198,20 +96,11 @@
       margin-top: 8px;
       transition: background 0.2s;
     }
-
     .submit-btn:active { background: #a85a20; }
-
     .submit-btn.energy-btn { background: #4a7fa5; }
     .submit-btn.energy-btn:active { background: #3a6a8a; }
-
-    .status-msg {
-      text-align: center;
-      font-size: 0.8rem;
-      color: #555;
-      margin-top: 14px;
-      min-height: 20px;
-    }
-
+    .submit-btn.people-btn { background: #666; }
+    .status-msg { text-align: center; font-size: 0.8rem; color: #555; margin-top: 14px; min-height: 20px; }
     .status-msg.success { color: #7ac47a; }
     .status-msg.error { color: #c47a7a; }
   </style>
@@ -240,7 +129,7 @@
     </div>
   </div>
 
-  <!-- PROPERTIES SCREEN -->
+  <!-- PROPERTIES -->
   <div class="screen" id="properties">
     <div class="screen-header">
       <button class="back-btn" onclick="show('home')">←</button>
@@ -251,7 +140,6 @@
         <label>Address</label>
         <input type="text" id="p-address" placeholder="Street address" />
       </div>
-
       <div class="form-group">
         <label>Status</label>
         <select id="p-status">
@@ -261,7 +149,6 @@
           <option>Unknown</option>
         </select>
       </div>
-
       <div class="form-group">
         <label>Property Type</label>
         <select id="p-type">
@@ -273,7 +160,6 @@
           <option>Unknown</option>
         </select>
       </div>
-
       <div class="form-group">
         <label>Distress Signals</label>
         <select id="p-distress">
@@ -285,7 +171,6 @@
           <option>None Visible</option>
         </select>
       </div>
-
       <div class="form-group">
         <label>My Listing?</label>
         <select id="p-mylisting">
@@ -293,7 +178,6 @@
           <option value="Yes">Yes</option>
         </select>
       </div>
-
       <div class="form-group">
         <label>Eagles — First Impression (required)</label>
         <div class="eagles-row" id="p-eagles">
@@ -306,7 +190,6 @@
           <button class="eagle-btn" onclick="setEagles('p',7)">7</button>
         </div>
       </div>
-
       <div class="form-group">
         <label>Photos (up to 5)</label>
         <div class="photo-upload" onclick="document.getElementById('p-photos').click()">
@@ -315,18 +198,16 @@
         </div>
         <div class="photo-previews" id="p-previews"></div>
       </div>
-
       <div class="form-group">
         <label>Notes</label>
         <textarea id="p-notes" placeholder="Anything else worth remembering..."></textarea>
       </div>
-
       <button class="submit-btn" onclick="submitProperty()">Log Property</button>
       <div class="status-msg" id="p-status-msg"></div>
     </div>
   </div>
 
-  <!-- ENERGY SCREEN -->
+  <!-- ENERGY -->
   <div class="screen" id="energy">
     <div class="screen-header">
       <button class="back-btn" onclick="show('home')">←</button>
@@ -337,7 +218,6 @@
         <label>Location or Area</label>
         <input type="text" id="e-location" placeholder="Neighborhood, intersection, or description" />
       </div>
-
       <div class="form-group">
         <label>Eagles — Field Instinct (required)</label>
         <div class="eagles-row" id="e-eagles">
@@ -350,27 +230,24 @@
           <button class="eagle-btn" onclick="setEagles('e',7)">7</button>
         </div>
       </div>
-
       <div class="form-group">
-        <label>Photo</label>
+        <label>Photos (up to 5)</label>
         <div class="photo-upload" onclick="document.getElementById('e-photos').click()">
-          Tap to add a photo
+          Tap to add photos
           <input type="file" id="e-photos" accept="image/*" multiple onchange="previewPhotos('e')" />
         </div>
         <div class="photo-previews" id="e-previews"></div>
       </div>
-
       <div class="form-group">
         <label>Notes</label>
         <textarea id="e-notes" placeholder="What caught your eye? What does it feel like?"></textarea>
       </div>
-
       <button class="submit-btn energy-btn" onclick="submitEnergy()">Log Energy</button>
       <div class="status-msg" id="e-status-msg"></div>
     </div>
   </div>
 
-  <!-- PEOPLE SCREEN -->
+  <!-- PEOPLE -->
   <div class="screen" id="people">
     <div class="screen-header">
       <button class="back-btn" onclick="show('home')">←</button>
@@ -404,7 +281,7 @@
         <label>Notes</label>
         <textarea id="pe-notes" placeholder="How you met, what they're looking for, anything relevant..."></textarea>
       </div>
-      <button class="submit-btn" onclick="submitPerson()" style="background:#666;">Log Person</button>
+      <button class="submit-btn people-btn" onclick="submitPerson()">Log Person</button>
       <div class="status-msg" id="pe-status-msg"></div>
     </div>
   </div>
@@ -417,9 +294,7 @@
   function show(id) {
     document.getElementById('home').style.display = id === 'home' ? 'block' : 'none';
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    if (id !== 'home') {
-      document.getElementById(id).classList.add('active');
-    }
+    if (id !== 'home') document.getElementById(id).classList.add('active');
   }
 
   function setEagles(prefix, val) {
@@ -433,25 +308,47 @@
     const input = document.getElementById(`${prefix}-photos`);
     const preview = document.getElementById(`${prefix}-previews`);
     preview.innerHTML = '';
-    const files = Array.from(input.files).slice(0, 5);
-    files.forEach(file => {
+    Array.from(input.files).slice(0, 5).forEach(file => {
       const img = document.createElement('img');
       img.src = URL.createObjectURL(file);
       preview.appendChild(img);
     });
   }
 
-  function validate(fields, eaglesPrefix) {
-    const filled = fields.filter(f => f && f.trim() !== '');
-    if (filled.length < 2) return "Fill in at least 2 fields to submit.";
-    if (!eaglesVal[eaglesPrefix]) return "Eagles rating is required.";
-    return null;
+  function getFilledCount(fields) {
+    return fields.filter(f => f && f.trim() !== '').length;
+  }
+
+  async function encodePhotos(inputId) {
+    const input = document.getElementById(inputId);
+    const files = Array.from(input.files).slice(0, 5);
+    const encoded = [];
+    for (const file of files) {
+      const base64 = await new Promise((res) => {
+        const reader = new FileReader();
+        reader.onload = e => res(e.target.result.split(',')[1]);
+        reader.readAsDataURL(file);
+      });
+      encoded.push({ data: base64, mimeType: file.type });
+    }
+    return encoded;
   }
 
   function setStatus(id, msg, type) {
     const el = document.getElementById(id);
     el.textContent = msg;
     el.className = 'status-msg ' + (type || '');
+  }
+
+  function clearForm(textIds, selectIds, eaglesPrefix, photoInputId, previewId) {
+    textIds.forEach(id => document.getElementById(id).value = '');
+    selectIds.forEach(id => document.getElementById(id).selectedIndex = 0);
+    if (eaglesPrefix) {
+      eaglesVal[eaglesPrefix] = 0;
+      document.querySelectorAll(`#${eaglesPrefix}-eagles .eagle-btn`).forEach(btn => btn.classList.remove('selected'));
+    }
+    if (photoInputId) document.getElementById(photoInputId).value = '';
+    if (previewId) document.getElementById(previewId).innerHTML = '';
   }
 
   async function submitProperty() {
@@ -463,11 +360,14 @@
     const notes = document.getElementById('p-notes').value;
     const eagles = eaglesVal['p'];
 
-    const err = validate([address, status, type, notes], 'p');
-    if (err) { setStatus('p-status-msg', err, 'error'); return; }
+    const filled = getFilledCount([address, status, type, notes]);
+    if (filled < 2) { setStatus('p-status-msg', 'Fill in at least 2 fields to submit.', 'error'); return; }
+    if (!eagles) { setStatus('p-status-msg', 'Eagles rating is required.', 'error'); return; }
+
+    setStatus('p-status-msg', 'Uploading photos...', '');
+    const photos = await encodePhotos('p-photos');
 
     setStatus('p-status-msg', 'Logging...', '');
-
     try {
       await fetch(SCRIPT_URL, {
         method: 'POST',
@@ -478,11 +378,11 @@
           timestamp: new Date().toISOString(),
           address, status, propertyType: type,
           distress, myListing: mylisting,
-          eagles, notes
+          eagles, notes, photos
         })
       });
       setStatus('p-status-msg', '🦅 Property logged.', 'success');
-      clearForm(['p-address','p-notes'], ['p-status','p-type','p-distress','p-mylisting'], 'p');
+      clearForm(['p-address','p-notes'], ['p-status','p-type','p-distress','p-mylisting'], 'p', 'p-photos', 'p-previews');
     } catch(e) {
       setStatus('p-status-msg', 'Something went wrong. Try again.', 'error');
     }
@@ -493,11 +393,14 @@
     const notes = document.getElementById('e-notes').value;
     const eagles = eaglesVal['e'];
 
-    const err = validate([location, notes], 'e');
-    if (err) { setStatus('e-status-msg', err, 'error'); return; }
+    const filled = getFilledCount([location, notes]);
+    if (filled < 2) { setStatus('e-status-msg', 'Fill in at least 2 fields to submit.', 'error'); return; }
+    if (!eagles) { setStatus('e-status-msg', 'Eagles rating is required.', 'error'); return; }
+
+    setStatus('e-status-msg', 'Uploading photos...', '');
+    const photos = await encodePhotos('e-photos');
 
     setStatus('e-status-msg', 'Logging...', '');
-
     try {
       await fetch(SCRIPT_URL, {
         method: 'POST',
@@ -506,11 +409,11 @@
         body: JSON.stringify({
           type: 'energy',
           timestamp: new Date().toISOString(),
-          location, eagles, notes
+          location, eagles, notes, photos
         })
       });
       setStatus('e-status-msg', '🦅 Energy logged.', 'success');
-      clearForm(['e-location','e-notes'], [], 'e');
+      clearForm(['e-location','e-notes'], [], 'e', 'e-photos', 'e-previews');
     } catch(e) {
       setStatus('e-status-msg', 'Something went wrong. Try again.', 'error');
     }
@@ -523,16 +426,10 @@
     const type = document.getElementById('pe-type').value;
     const notes = document.getElementById('pe-notes').value;
 
-    const err = validate([name, phone, email, notes], null);
-    if (err && !eaglesVal['p']) {
-      if ([name,phone,email,notes].filter(f=>f&&f.trim()).length < 2) {
-        setStatus('pe-status-msg', 'Fill in at least 2 fields to submit.', 'error');
-        return;
-      }
-    }
+    const filled = getFilledCount([name, phone, email, notes]);
+    if (filled < 2) { setStatus('pe-status-msg', 'Fill in at least 2 fields to submit.', 'error'); return; }
 
     setStatus('pe-status-msg', 'Logging...', '');
-
     try {
       await fetch(SCRIPT_URL, {
         method: 'POST',
@@ -541,25 +438,13 @@
         body: JSON.stringify({
           type: 'person',
           timestamp: new Date().toISOString(),
-          name, phone, email,
-          personType: type, notes
+          name, phone, email, personType: type, notes
         })
       });
       setStatus('pe-status-msg', '✓ Person logged.', 'success');
-      clearForm(['pe-name','pe-phone','pe-email','pe-notes'], ['pe-type'], null);
+      clearForm(['pe-name','pe-phone','pe-email','pe-notes'], ['pe-type'], null, null, null);
     } catch(e) {
       setStatus('pe-status-msg', 'Something went wrong. Try again.', 'error');
-    }
-  }
-
-  function clearForm(textIds, selectIds, eaglesPrefix) {
-    textIds.forEach(id => document.getElementById(id).value = '');
-    selectIds.forEach(id => document.getElementById(id).selectedIndex = 0);
-    if (eaglesPrefix) {
-      eaglesVal[eaglesPrefix] = 0;
-      document.querySelectorAll(`#${eaglesPrefix}-eagles .eagle-btn`).forEach(btn => {
-        btn.classList.remove('selected');
-      });
     }
   }
 </script>
